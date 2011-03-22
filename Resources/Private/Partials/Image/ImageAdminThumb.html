@@ -1,0 +1,59 @@
+{namespace yag=Tx_Yag_ViewHelpers}
+{namespace extlist=Tx_PtExtlist_ViewHelpers}
+
+
+
+<div class="photo-detail {f:if(condition: image.isAlbumThumb, then:' photo-detail-index-photo')}" id="imageUid-{image.uid}">
+    <div class="photo-detail-edit"></div>
+    <div class="photo-detail-text">{image.title}</div>
+    <div class="photo-detail-photo">
+        <yag:image item="{image}" resolutionName="thumb" />
+	    <div class="photo-detail-linkbar">
+	        <div class="photo-detail-linkbar-background transparent-70"></div>
+	        <a class="photo-detail-linkbar-button photo-detail-linkbar-delete" href="" title="Delete item!">
+	          <span class="t3-icon t3-icon-actions t3-icon-actions-edit t3-icon-edit-delete">&nbsp;</span>
+	        </a> 
+	        <a class="photo-detail-linkbar-button photo-detail-linkbar-key" title="Set item as album thumb">
+	          <span class="t3-icon t3-icon-apps t3-icon-apps-toolbar t3-icon-toolbar-menu-shortcut">&nbsp;</span>
+	        </a> 
+	        <a class="photo-detail-linkbar-button photo-detail-linkbar-description" title="Change description">
+	        	<span class="t3-icon t3-icon-actions t3-icon-actions-page t3-icon-page-open">&nbsp;</span>
+	        </a>
+	        <a href="/{image.sourceuri}" rel="shadowbox[images]" title="Show {image.title}" class="photo-detail-linkbar-button photo-detail-linkbar-show">
+	            <span class="t3-icon t3-icon-apps t3-icon-apps-toolbar t3-icon-toolbar-menu-search">&nbsp;</span>
+	        </a>
+	    </div>
+	    <div class="photo-detail-size">{image.width} x {image.height}</div>
+    </div>
+
+    <div class="photo-detail-name">
+      <form id="photo-detail-name-form" class="button-small" method="post" action="index.php?id={pageId}&tx_yag_pi1[Controller]=Ajax&tx_yag_pi1[action]=updateItemName">
+        <fieldset style="display: none;">
+          <input type="hidden" name="_method" value="POST" />
+          <input type="hidden" name="tx_yag_pi1[itemUid]={image.uid}" />
+        </fieldset>
+
+        <div class="photo-detail-name-background transparent-70"></div>
+        <textarea name="tx_yag_pi1[itemTitle]" label="" id="PhotoName" cols="" rows="">{image.title}</textarea> 
+        
+        <a class="photo-detail-name-cancel">Abbrechen</a>&nbsp;
+        <a class="photo-detail-name-submit">Speichern</a>
+      </form>
+    </div>
+
+    <div class="photo-detail-description">
+      <form id="photo-detail-description-form" class="button-small" method="post" action="index.php?id={pageId}&tx_yag_pi1[Controller]=Ajax&tx_yag_pi1[action]=updateItemDescription">
+        <fieldset style="display: none;">
+          <input type="hidden" name="_method" value="POST" />
+          <input type="hidden" name="tx_yag_pi1[itemUid]={image.uid}" />
+        </fieldset>
+
+        <div class="photo-detail-description-background transparent-70"></div>
+        <span>Fotobeschreibung</span> 
+        <textarea name="tx_yag_pi1[itemDescription]" label="" id="PhotoDescription" cols="" rows="">{image.description}</textarea>
+         
+        <a class="photo-detail-description-cancel">Abbrechen</a>
+        <a class="photo-detail-description-submit">Speichern</a>
+      </form>
+    </div>
+</div>

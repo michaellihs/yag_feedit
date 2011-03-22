@@ -1,0 +1,34 @@
+{namespace yag=Tx_Yag_ViewHelpers}
+{namespace extlist=Tx_PtExtlist_ViewHelpers}
+{namespace rbac=Tx_Rbac_ViewHelpers}
+
+<extlist:comment>
+<!--  
+Template for rendering a thumbnail image
+
+Here is a list of objects / variables that can be accessed in this template:
+
+Tx_Yag_Domain_Model_Item item               Item object to be rendered
+
+@package YAG
+@author Michael Knoll <mimi@kaktusteam.de>
+@author Daniel Lienert <daniel@lienert.cc>
+-->
+</extlist:comment>
+
+<div class="tx-yag-thumb-outerframe" style="width:{config.itemListConfig.columnRelativeWidth}%">
+	<div class="tx-yag-thumb-innerframe">
+		<div>
+			<extlist:link.action action="show" controller="Item" arguments="{itemUid: rowIndex}">
+				<yag:image item="{image}" resolutionName="thumb" />
+			</extlist:link.action>
+		</div>
+		<f:if condition="{config.itemListConfig.showTitle}">
+			<div class="tx-yag-thumb-caption">{image.title}		</div>
+		</f:if>
+		<rbac:hasAccess object="Item" action="delete">
+		    <br/>
+		    <f:link.action action="delete" controller="Item" arguments="{item: image.uid}">Delete</f:link.action>
+	    </rbac:hasAccess>
+	</div>
+</div>

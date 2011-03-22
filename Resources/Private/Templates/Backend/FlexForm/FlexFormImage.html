@@ -1,0 +1,45 @@
+{namespace yag=Tx_Yag_ViewHelpers}
+
+<yag:Javascript.Template templatePath="Resources/Private/JSTemplates/FlexForm/SelectImage.js" arguments="{elementId : PA.elementID, PID : pid}" />
+
+<div class="itemSelectorBox">
+	<f:render partial="Backend/Flexform/FlexFormGalleryList.html" arguments="{selectedGalleryUid: selectedGallery.uid, listId: 'imageGallerySelector', galleries : galleries}" />
+</div>
+
+<div class="selectorBoxSeparator">
+	<img src="../typo3conf/ext/yag/Resources/Public/Icons/triangle.png" />
+</div>
+
+<f:if condition="{selectedAlbum.uid} > 0">
+	<f:then>
+		<div id="imageAlbumSelectorBox" class="itemSelectorBox">
+			<f:render partial="Backend/Flexform/FlexFormAlbumList.html" arguments="{selectedAlbumUid: selectedAlbum.uid, albums: albums, listId: 'imageAlbumSelector'}" />
+		</div>
+	</f:then>
+	<f:else>
+		<div id="imageAlbumSelectorBox" class="inactiveSelectorBox">
+			<div class="inactiveInfo"><f:translate key="LLL:EXT:yag/Resources/Private/Language/locallang_flexform.xml:tx_yag_flexform_gallery.noGallerySelected" /></div>
+		</div>
+	</f:else>
+</f:if>
+
+<div class="selectorBoxSeparator">
+	<img src="../typo3conf/ext/yag/Resources/Public/Icons/triangle.png" />
+</div>
+
+<f:if condition="{selectedImage.uid} > 0">
+	<f:then>
+		<div id="imageImageSelectorBox" class="itemSelectorBox">
+			<f:render partial="Backend/Flexform/FlexFormImageList.html" arguments="{selectedImageUid: selectedImage.uid, images: images, listId: 'imageImageSelector'}" />
+		</div>
+	</f:then>
+	<f:else>
+		<div id="imageImageSelectorBox" class="inactiveSelectorBox">
+			<div class="inactiveInfo"><f:translate key="LLL:EXT:yag/Resources/Private/Language/locallang_flexform.xml:tx_yag_flexform_gallery.noAlbumSelected" /></div>
+		</div>
+	</f:else>
+</f:if>
+
+<div style="clear:both"></div>
+
+<f:form.hidden name="{PA.itemFormElName}" value="{PA.itemFormElValue}" id="{PA.elementID}" />

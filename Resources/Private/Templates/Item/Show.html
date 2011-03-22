@@ -1,0 +1,72 @@
+{namespace yag=Tx_Yag_ViewHelpers}
+{namespace extlist=Tx_PtExtlist_ViewHelpers}
+
+<extlist:comment>
+<!--  
+Template for rendering single item
+
+Here is a list of objects / variables that can be accessed in this template:
+
+Tx_Yag_Domain_Model_Item mainItem              Item to be rendered
+
+@package YAG
+@author Michael Knoll <mimi@kaktusteam.de>
+@author Daniel Lienert <daniel@lienert.cc>
+-->
+</extlist:comment>
+
+<f:layout name="Default" />
+<f:section name="main">
+
+	<div class="tx-yag-singleview">
+		<div class="tx-yag-image">
+		    <f:if condition="{lastItem}">
+		        <f:then>
+			        <yag:image item="{mainItem}" resolutionName="medium" />
+			    </f:then>
+			    <f:else>
+			        <extlist:link.action action="show" arguments="{extlist:namespace.GPArray(object:'{pagerCollection}' arguments:'page:{pager.nextPage}')}">
+				        <yag:image item="{mainItem}" resolutionName="medium" />
+				    </extlist:link.action>
+			    </f:else>
+		    </f:if>
+		</div>
+		
+		
+		<div class="tx-yag-navigator">
+			<div class="tx-yag-previous">
+			    <f:if condition="{pager.currentPage} != 1">
+			        <f:then>
+				        <extlist:link.action action="show" arguments="{extlist:namespace.GPArray(object:'{pagerCollection}' arguments:'page:{pager.previousPage}')}"><f:translate key="pager.previous" default="&laquo; previous" /></extlist:link.action>
+				    </f:then>
+				    <f:else>
+				        <f:translate key="pager.previous" default="&laquo; previous" />
+				    </f:else>
+			    </f:if>
+			</div>
+			<span class="tx-yag-current">
+					{pager.firstItemIndex} <f:translate key="pager.of" default="of" /> {pager.itemCount}
+			</span>
+			<div class="tx-yag-next" >
+			    <f:if condition="{lastItem}">
+			        <f:then>
+			            <f:translate key="pager.next" default="next &raquo;" />
+			        </f:then>
+			        <f:else>
+				        <extlist:link.action action="show" arguments="{extlist:namespace.GPArray(object:'{pagerCollection}' arguments:'page:{pager.nextPage}')}"><f:translate key="pager.next" default="next &raquo;" /></extlist:link.action>
+			        </f:else>
+				</f:if>
+			</div>
+		</div>
+	   <f:if condition='{config.itemConfig.showItemMeta}'>
+	   	<f:render partial="{config.itemConfig.itemMetaPartial}" arguments="{mainItem: mainItem}" />
+	   </f:if>
+	   <br />
+	   <div class="tx-yag-single-download"><a target="_blank" href="{mainItem.sourceUri}"><f:translate key="tx_yag_controller_item.downloadOrig" default="" /> ({mainItem.width} x {mainItem.height})</a></div>
+	</div>
+</f:section>
+
+<f:section name="feAdminLinks"></f:section>
+<f:section name="beButtonsLeft">
+	<f:be.buttons.icon uri="{f:uri.action(action: 'show', controller: 'ItemList', arguments: '{backFromItemUid : mainItem.uid}')}"/>
+</f:section>

@@ -1,0 +1,146 @@
+{namespace yag=Tx_Yag_ViewHelpers}
+{namespace extlist=Tx_PtExtlist_ViewHelpers}
+{namespace rbac=Tx_Rbac_ViewHelpers}
+
+<extlist:comment>
+<!--  
+Template for rendering gallery index in backend context
+
+Here is a list of objects / variables that can be accessed in this template:
+
+Tx_PtExtlist_Domain_Model_List_ListData  listData               Items to be rendered
+Tx_PtExtlist_Domain_Model_Pager_PagerInterface pager            Pager
+Tx_PtExtlist_Domain_Model_Pager_PagerCollection pagerCollection Collection of pagers
+
+@package YAG
+@author Michael Knoll <mimi@kaktusteam.de>
+@author Daniel Lienert <daniel@lienert.cc>
+-->
+</extlist:comment>
+
+<f:layout name="Default" />
+<f:section name="main">
+
+<yag:Javascript.Template templatePath="Resources/Private/JSTemplates/GalleryBackendIndex.js" arguments="{ajaxBaseURL : '{f:uri.action(controller:\'Ajax\')}', galleryUid : gallery.uid}" />
+    
+<h2><f:translate key="tx_yag_domain_model_gallery" />: {gallery.name}</h2>
+
+    
+<table id="sortable" class="grid typo3-dblist" cellspacing="0" cellpadding="0" border="0">
+	<thead>
+	    <tr class="t3-row-header">
+	        <td colspan="4">
+	            <f:translate key="tx_yag_domain_model_album" /> ({listData.count})
+	        </td>
+	    </tr>
+	    <tr class="c-headLine">
+	        <td class="col-icon">
+	            <f:link.action controller="Album" action="new" arguments="{gallery: gallery}">
+	                <span class="t3-icon t3-icon-actions t3-icon-actions-document t3-icon-document-new">&nbsp;</span>
+	            </f:link.action>
+	        </td>
+	        <td class="col-title">
+	            <f:translate key="tx_yag_domain_model_album.thumb" />:
+	        </td>
+	        <td colspan="2">
+	            <f:translate key="tx_yag_domain_model_album.name" />:
+	        </td>
+	    </tr>
+	</thead>
+	<tbody class="ui-sortable">
+    
+    <f:for each="{listData}" key="rowIndex" as="listRow">
+        <tr id="albumUid-{listRow.album.value.uid}" class="db_list_normal {f:if(condition: listRow.album.value.isGalleryThumb, then:' tx-yag-album-index-album')}">
+            <td class="col-icon">
+            
+            </td>
+            <td>
+			    <f:link.action action="submitFilter" controller="ItemList" arguments="{extlist:namespace.GPArray(object: yagContext arguments:'albumUid:{listRow.album.value.uid}')}">
+			        <f:if condition="{listRow.album.value.itemCount} > 0">
+			            <f:then>
+			                <f:if condition="{listRow.album.value.hide}">
+			                    <f:then>
+				                    <div id="album-{listRow.album.value.uid}-transparency" class="tx-yag-transparency-half">
+				                        <yag:image item="{listRow.album.value.thumb}" resolutionName="thumb" />
+				                    </div>
+				                </f:then>
+				                <f:else>
+				                    <div id="album-{listRow.album.value.uid}-transparency">
+				                        <yag:image item="{listRow.album.value.thumb}" resolutionName="thumb" />
+				                    </div>
+				                </f:else>
+			                </f:if>
+			            </f:then>
+			            <f:else>
+			                <div><f:translate key="tx_yag_domain_model_album.noItems" /></div>
+			            </f:else>
+			        </f:if>
+			    </f:link.action>
+			</td>
+			<td>
+			    <div>
+		           <f:link.action action="submitFilter" controller="ItemList" arguments="{extlist:namespace.GPArray(object: yagContext arguments:'albumUid:{listRow.album.value.uid}')}">
+		               {listRow.album.value.name}
+		           </f:link.action><br/>
+		           {listRow.album.value.itemCount} <f:translate key="tx_yag_domain_model_album.items" />
+                </div>
+            </td>
+            <td>  
+		        <div class="typo3-DBctrl">
+		            <f:link.action title="Edit album" controller="Album" action="edit" arguments="{album: listRow.album.value}">
+		                <span class="t3-icon t3-icon-actions t3-icon-actions-document t3-icon-document-open">&nbsp;</span>
+		            </f:link.action>
+		            <f:if condition="{listRow.album.value.hide}">
+		                <f:then>
+				            <a title="Unhide album" id="unhide-album-{listRow.album.value.uid}" class="unhide-album" albumUid="{listRow.album.value.uid}">
+				                <span class="t3-icon t3-icon-actions t3-icon-actions-edit t3-icon-edit-unhide">&nbsp;</span>
+				            </a>
+				        </f:then><f:else>
+				            <a title="Hide album" id="hide-album-{listRow.album.value.uid}" class="hide-album" albumUid="{listRow.album.value.uid}">
+				                <span class="t3-icon t3-icon-actions t3-icon-actions-edit t3-icon-edit-hide">&nbsp;</span>
+				            </a>
+				        </f:else>
+				    </f:if>
+				    <a href="" title="Delete album!" albumUid="{listRow.album.value.uid}" class="album-linkbar-delete">
+		                <span class="t3-icon t3-icon-actions t3-icon-actions-edit t3-icon-edit-delete">&nbsp;</span>
+		            </a>
+		            <f:link.action controller="Album" title="Upload images to album" action="addItems" arguments="{album: listRow.album.value}">
+		                <span class="t3-icon t3-icon-actions t3-icon-actions-edit t3-icon-edit-upload">&nbsp;</span>
+		            </f:link.action>
+		            <f:link.action title="Change sorting of images" action="submitFilter" controller="ItemList" arguments="{extlist:namespace.GPArray(object: yagContext arguments:'albumUid:{listRow.album.value.uid}')}">
+		                <span class="t3-icon t3-icon-actions t3-icon-actions-document t3-icon-document-move">&nbsp;</span>
+	                </f:link.action>
+	                <a title="Set album as gallery thumb" class="set-as-gallery-thumb" albumUid="{listRow.album.value.uid}">
+                        <span class="t3-icon t3-icon-apps t3-icon-apps-toolbar t3-icon-toolbar-menu-shortcut">&nbsp;</span>
+                    </a>
+		        </div>
+			</td>
+        </tr>
+    </f:for>
+    </tbody>
+</table>
+
+
+<div class="tx-yag-pager">
+    <f:render partial="Pager" arguments="{pager: pager, pagerCollection: pagerCollection, itemsText: 'albums'}" />
+</div>
+    
+    
+</f:section>
+
+
+<f:section name="feAdminLinks">
+    <div class="tx-yag-adminLinkSection">
+        <rbac:hasAccess object="Album" action="create">
+            <f:link.action controller="Album" action="new" arguments="{gallery: gallery}"><f:translate key="tx_yag_controller_album.addAlbum" /></f:link.action>&nbsp;
+        </rbac:hasAccess>
+        <rbac:hasAccess object="Gallery" action="edit">
+            <div><f:link.action controller="Gallery" action="edit" arguments="{gallery: gallery}"><f:translate key="tx_yag_controller_gallery.editGallery" /></f:link.action></div>
+        </rbac:hasAccess>
+    </div>
+</f:section>
+
+<f:section name="beButtonsLeft">
+    <f:be.buttons.icon uri="{f:uri.action(action: 'list')}"/>
+    <f:be.buttons.icon uri="{f:uri.action(action: 'new', controller: 'Album', arguments: '{gallery: gallery}')}" icon="new_el"/>
+</f:section>
