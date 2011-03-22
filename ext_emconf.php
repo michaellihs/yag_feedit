@@ -11,14 +11,14 @@
 ########################################################################
 
 $EM_CONF[$_EXTKEY] = array(
-	'title' => 'YAG Theme Simpleviewer',
+	'title' => 'YAG Frontend Editor',
 	'description' => '',
 	'category' => 'plugin',
-	'author' => 'Daniel Lienert',
-	'author_email' => 'daniel@lienert.cc',
+	'author' => 'Michael Knoll, Daniel Lienert',
+	'author_email' => 'mimi@kaktsuteam.de, daniel@lienert.cc',
 	'author_company' => '',
 	'shy' => '',
-	'dependencies' => 'cms,extbase,fluid,yag',
+	'dependencies' => 'cms,extbase,fluid,yag,rbac',
 	'conflicts' => '',
 	'priority' => '',
 	'module' => '',
@@ -29,7 +29,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'modify_tables' => '',
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
-	'version' => '0.1.3',
+	'version' => '0.0.0',
 	'constraints' => array(
 		'depends' => array(
 			'cms' => '',
